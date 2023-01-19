@@ -9,9 +9,11 @@ import { Car } from "../../components/Car";
 // import { LoadAnimation } from "../../components/LoadAnimation";
 
 import { Container, Header, HeaderContent, TotalCars, CarList } from "./styles";
+import { api } from "../../services/api";
+import { CarDTO } from "../../dtos/CarDTO";
 
 export function Home() {
-  const [cars, setCars] = useState([]);
+  const [cars, setCars] = useState<CarDTO[]>([]);
   const [loading, setLoading] = useState(true);
 
   const navigation = useNavigation();
@@ -19,6 +21,20 @@ export function Home() {
   function handleCarDetails(car) {
     navigation.navigate("CarDetails", { car });
   }
+
+  useEffect(() => {
+    async function fetchCars() {
+      try {
+        const response = await api.get("/cars");
+        setCars(response.data);
+      } catch (error) {
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchCars();
+  }, []);
 
   return (
     <Container>
@@ -34,10 +50,7 @@ export function Home() {
         </HeaderContent>
       </Header>
 
-      {loading ? (
-        // <LoadAnimation /> 
-        null
-      ) : (
+      {loading ? null : ( // <LoadAnimation />
         <CarList
           data={cars}
           keyExtractor={(item) => item.id}
