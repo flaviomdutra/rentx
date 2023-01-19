@@ -20,7 +20,7 @@ export function AuthRoutes(){
         name="SignIn"
         component={SignIn}
       />
-      <Screen 
+      {/* <Screen 
         name="SignUpFirstStep"
         component={SignUpFirstStep}
       />
@@ -31,7 +31,7 @@ export function AuthRoutes(){
       <Screen 
         name="Confirmation"
         component={Confirmation}
-      />
+      /> */}
     </Navigator>
   )
 }
