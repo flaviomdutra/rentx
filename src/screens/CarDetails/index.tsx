@@ -43,7 +43,8 @@ export function CarDetails() {
   const theme = useTheme();
 
   function handleConfirmRental() {
-    navigation.navigate("Scheduling", { car: carUpdate });
+    navigation.navigate("Scheduling", { car });
+    // navigation.navigate("Scheduling", { car: carUpdate });
   }
 
   function handleBack() {

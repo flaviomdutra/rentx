@@ -44,7 +44,7 @@ interface DataProps {
 }
 
 export function MyCars() {
-  const [cars, setCars] = useState<CarProps[]>([]);
+  const [cars, setCars] = useState<DataProps[]>([]);
   const [loading, setLoading] = useState(true);
 
   const navigation = useNavigation();
@@ -57,8 +57,8 @@ export function MyCars() {
   useEffect(() => {
     async function fetchCars() {
       try {
-        const response = await api.get("/rentals");
-        const dataFormatted = response.data.map((data: CarProps) => {
+        const response = await api.get("/schedules_byuser");
+        const dataFormatted = response.data.map((data: DataProps) => {
           return {
             car: data.car,
             // start_date: format(parseISO(data.startDate), "dd/MM/yyyy"),
