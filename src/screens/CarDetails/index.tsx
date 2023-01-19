@@ -66,9 +66,12 @@ export function CarDetails() {
       <CarImages>
         <ImageSlider
           imagesUrl={
-            !!carUpdate.photos
-              ? carUpdate.photos
-              : [{ id: car.thumbnail, photo: car.thumbnail }]
+            // !!carUpdate.photos
+            //   ? carUpdate.photos
+            //   : [{ id: car.thumbnail, photo: car.thumbnail }]
+            car.photos.map((c, i) => {
+              return { id: c, photo: c };
+            })
           }
         />
       </CarImages>
