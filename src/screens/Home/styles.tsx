@@ -1,6 +1,7 @@
-import styled from "styled-components/native";
-import { FlatList } from "react-native";
-import { RFValue } from "react-native-responsive-fontsize";
+import styled from 'styled-components/native';
+import { FlatList } from 'react-native';
+import { RFValue } from 'react-native-responsive-fontsize';
+import { Car } from '../../database/model/Car';
 
 export const Container = styled.View`
   flex: 1;
@@ -10,8 +11,9 @@ export const Container = styled.View`
 export const Header = styled.View`
   width: 100%;
   height: 113px;
-  background-color: ${({ theme }) => theme.colors.header};
 
+  background-color: ${({ theme }) => theme.colors.header};  
+  
   justify-content: flex-end;
   padding: 32px 24px;
 `;
@@ -28,9 +30,10 @@ export const TotalCars = styled.Text`
   color: ${({ theme }) => theme.colors.text};
 `;
 
-export const CarList = styled(FlatList).attrs({
+export const CarList = styled(FlatList as new () => FlatList<Car>)
+.attrs({
   contentContainerStyle: {
-    padding: 24,
+    padding: 24
   },
-  showsVerticalScrollIndicator: false,
+  showsVerticalScrollIndicator: false
 })``;

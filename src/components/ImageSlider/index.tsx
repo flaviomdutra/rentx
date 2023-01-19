@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { FlatList, ViewToken } from 'react-native';
+import FastImage from 'react-native-fast-image'
 
 import { Bullet } from '../Bullet';
 

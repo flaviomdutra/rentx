@@ -1,24 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
 import { StatusBar } from "react-native";
 import { RFValue } from "react-native-responsive-fontsize";
 
 import Logo from "../../assets/logo.svg";
-import { Car } from "../../components/Car";
 
-import { Container, Header, TotalCars, HeaderContent, CarList } from "./styles";
+import { Car } from "../../components/Car";
+// import { LoadAnimation } from "../../components/LoadAnimation";
+
+import { Container, Header, HeaderContent, TotalCars, CarList } from "./styles";
 
 export function Home() {
-  const carData = {
-    brand: "Audi",
-    name: "RS 5 Coupé",
-    rent: {
-      period: "Ao dia",
-      price: 120,
-    },
+  const [cars, setCars] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-    thumbnail:
-      "https://production.autoforce.com/uploads/version/profile_image/6737/comprar-tiptronic_13d79f3c1b.png",
-  };
+  const navigation = useNavigation();
+
+  function handleCarDetails(car) {
+    navigation.navigate("CarDetails", { car });
+  }
+
   return (
     <Container>
       <StatusBar
@@ -29,15 +30,22 @@ export function Home() {
       <Header>
         <HeaderContent>
           <Logo width={RFValue(108)} height={RFValue(12)} />
-          <TotalCars>Total de 12 carros</TotalCars>
+          {!loading && <TotalCars>Total de {cars.length} carros</TotalCars>}
         </HeaderContent>
       </Header>
 
-      <CarList
-        data={[1, 2, 3, 4, 5, 6, 7]}
-        keyExtractor={(item) => String(item)}
-        renderItem={({ item }) => <Car data={carData} />}
-      />
+      {loading ? (
+        // <LoadAnimation /> 
+        null
+      ) : (
+        <CarList
+          data={cars}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <Car data={item} onPress={() => handleCarDetails(item)} />
+          )}
+        />
+      )}
     </Container>
   );
 }

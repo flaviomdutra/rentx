@@ -1,9 +1,12 @@
-import React from "react";
-import { StatusBar } from "react-native";
+import React, { useEffect, useState } from "react";
+import { StatusBar, StyleSheet } from "react-native";
+import { useTheme } from "styled-components";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { getStatusBarHeight } from "react-native-iphone-x-helper";
 
+import { BackButton } from "../../components/BackButton";
 import { ImageSlider } from "../../components/ImageSlider";
 import { Accessory } from "../../components/Accessory";
-import { BackButton } from "../../components/BackButton";
 import { Button } from "../../components/Button";
 
 import { getAccessoryIcon } from "../../utils/getAccessoryIcon";
@@ -19,7 +22,6 @@ import {
   Rent,
   Period,
   Price,
-  Content,
   About,
   Accessories,
   Footer,
@@ -27,6 +29,22 @@ import {
 } from "./styles";
 
 export function CarDetails() {
+  const [carUpdate, setCarUpdate] = useState({});
+
+  const navigation = useNavigation();
+  const route = useRoute();
+  const { car } = route.params;
+
+  const theme = useTheme();
+
+  function handleConfirmRental() {
+    navigation.navigate("Scheduling", { car: carUpdate });
+  }
+
+  function handleBack() {
+    navigation.goBack();
+  }
+
   return (
     <Container>
       <StatusBar
@@ -36,79 +54,59 @@ export function CarDetails() {
       />
 
       <Header>
-        <BackButton onPress={() => {}} />
+        <BackButton onPress={handleBack} />
       </Header>
 
       <CarImages>
         <ImageSlider
-          imagesUrl={[
-            {
-              id: String(1),
-              photo:
-                "https://production.autoforce.com/uploads/version/profile_image/6737/comprar-tiptronic_13d79f3c1b.png",
-            },
-          ]}
+          imagesUrl={
+            !!carUpdate.photos
+              ? carUpdate.photos
+              : [{ id: car.thumbnail, photo: car.thumbnail }]
+          }
         />
       </CarImages>
 
-      <Content>
-        <Details>
-          <Description>
-            <Brand>Audi</Brand>
-            <Name>RS Coupé R8</Name>
-          </Description>
+      <Details>
+        <Description>
+          <Brand>{car.brand}</Brand>
+          <Name>{car.name}</Name>
+        </Description>
 
-          <Rent>
-            <Period>Ao dia</Period>
-            <Price>R$ 140</Price>
-          </Rent>
-        </Details>
+        <Rent>
+          <Period>{car.period}</Period>
+          <Price>R$ {car.price}</Price>
+        </Rent>
+      </Details>
 
+      {carUpdate.accessories && (
         <Accessories>
-          <Accessory
-            key="speed"
-            name={"380km/h"}
-            icon={getAccessoryIcon("speed")}
-          />
-          <Accessory
-            key="acceleration"
-            name={"3.2s"}
-            icon={getAccessoryIcon("acceleration")}
-          />
-          <Accessory
-            key="turning_diameter"
-            name={"800 HP"}
-            icon={getAccessoryIcon("turning_diameter")}
-          />
-          <Accessory
-            key="gasoline_motor"
-            name={"Gasolina"}
-            icon={getAccessoryIcon("gasoline_motor")}
-          />
-          <Accessory
-            key="exchange"
-            name={"Auto"}
-            icon={getAccessoryIcon("exchange")}
-          />
-          <Accessory
-            key="seats"
-            name={"2 pessoas"}
-            icon={getAccessoryIcon("seats")}
-          />
+          {carUpdate.accessories.map((accessory) => (
+            <Accessory
+              key={accessory.type}
+              name={accessory.name}
+              icon={getAccessoryIcon(accessory.type)}
+            />
+          ))}
         </Accessories>
+      )}
 
-        <About>
-          Este é automóvel desportivo. Surgiu do lendário touro de lide
-          indultado na praça Real Maestranza de Sevilla. É um belíssimo carro
-          para quem gosta de acelerar.
-        </About>
-      </Content>
+      <About>{car.about}</About>
+
       <Footer>
         <Button
           title="Escolher período do aluguel"
-          onPress={() => {}}
+          onPress={handleConfirmRental}
         />
       </Footer>
     </Container>
   );
 }
+
+const styles = StyleSheet.create({
+  header: {
+    position: "absolute",
+    overflow: "hidden",
+    zIndex: 1,
+  },
+});
