@@ -27,13 +27,18 @@ import {
   Footer,
   OfflineInfo,
 } from "./styles";
+import { CarDTO } from "../../dtos/CarDTO";
+
+interface Params {
+  car: CarDTO;
+}
 
 export function CarDetails() {
   const [carUpdate, setCarUpdate] = useState({});
 
   const navigation = useNavigation();
   const route = useRoute();
-  const { car } = route.params;
+  const { car } = route.params as Params;
 
   const theme = useTheme();
 
@@ -79,9 +84,9 @@ export function CarDetails() {
         </Rent>
       </Details>
 
-      {carUpdate.accessories && (
+      {car.accessories && (
         <Accessories>
-          {carUpdate.accessories.map((accessory) => (
+          {car.accessories.map((accessory) => (
             <Accessory
               key={accessory.type}
               name={accessory.name}

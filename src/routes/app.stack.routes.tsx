@@ -6,7 +6,7 @@ import { CarDetails } from '../screens/CarDetails';
 import { Scheduling } from '../screens/Scheduling';
 import { SchedulingDetails } from '../screens/SchedulingDetails';
 import { Confirmation } from '../screens/Confirmation';
-// import { MyCars } from '../screens/MyCars';
+import { MyCars } from '../screens/MyCars';
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -33,10 +33,10 @@ export function AppStackRoutes(){
         name="Confirmation"
         component={Confirmation}
       />
-      {/* <Screen 
+      <Screen 
         name="MyCars"
         component={MyCars}
-      /> */}
+      />
     </Navigator>
   )
 }

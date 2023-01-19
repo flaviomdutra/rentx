@@ -35,7 +35,7 @@ export function ImageSlider({imagesUrl}: Props){
     <Container>
       <ImageIndexes>
         {
-          imagesUrl.map((item, index) => (
+          imagesUrl?.map((item, index) => (
             <Bullet 
               key={String(item.id)}
               active={index === imageIndex} 
