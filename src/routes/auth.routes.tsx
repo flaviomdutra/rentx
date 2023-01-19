@@ -16,7 +16,7 @@ export function AuthRoutes(){
         name="Splash"
         component={Splash}
       />
-      {/* <Screen 
+      <Screen 
         name="SignIn"
         component={SignIn}
       />
@@ -31,7 +31,7 @@ export function AuthRoutes(){
       <Screen 
         name="Confirmation"
         component={Confirmation}
-      /> */}
+      />
     </Navigator>
   )
 }
