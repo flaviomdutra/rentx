@@ -3,6 +3,13 @@ import { StatusBar, StyleSheet } from "react-native";
 import { useTheme } from "styled-components";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { getStatusBarHeight } from "react-native-iphone-x-helper";
+import Animated, {
+  useSharedValue,
+  useAnimatedScrollHandler,
+  useAnimatedStyle,
+  interpolate,
+  Extrapolate,
+} from "react-native-reanimated";
 
 import { BackButton } from "../../components/BackButton";
 import { ImageSlider } from "../../components/ImageSlider";
@@ -40,11 +47,32 @@ export function CarDetails() {
   const route = useRoute();
   const { car } = route.params as Params;
 
+  const scrollY = useSharedValue(0);
+  const scrollHandler = useAnimatedScrollHandler((event) => {
+    scrollY.value = event.contentOffset.y;
+  });
+
+  const headerStyleAnimation = useAnimatedStyle(() => {
+    return {
+      height: interpolate(
+        scrollY.value,
+        [0, 200],
+        [200, 70],
+        Extrapolate.CLAMP
+      ),
+    };
+  });
+
   const theme = useTheme();
+
+  const sliderCarsStyleAnimation = useAnimatedStyle(() => {
+    return {
+      opacity: interpolate(scrollY.value, [0, 150], [1, 0], Extrapolate.CLAMP),
+    };
+  });
 
   function handleConfirmRental() {
     navigation.navigate("Scheduling", { car });
-    // navigation.navigate("Scheduling", { car: carUpdate });
   }
 
   function handleBack() {
@@ -59,48 +87,75 @@ export function CarDetails() {
         backgroundColor="transparent"
       />
 
-      <Header>
-        <BackButton onPress={handleBack} />
-      </Header>
+      <Animated.View
+        style={[
+          headerStyleAnimation,
+          styles.header,
+          {
+            backgroundColor: theme.colors.background_secondary,
+          },
+        ]}
+      >
+        <Header>
+          <BackButton onPress={handleBack} />
+        </Header>
 
-      <CarImages>
-        <ImageSlider
-          imagesUrl={
-            // !!carUpdate.photos
-            //   ? carUpdate.photos
-            //   : [{ id: car.thumbnail, photo: car.thumbnail }]
-            car.photos.map((c, i) => {
-              return { id: c, photo: c };
-            })
-          }
-        />
-      </CarImages>
-
-      <Details>
-        <Description>
-          <Brand>{car.brand}</Brand>
-          <Name>{car.name}</Name>
-        </Description>
-
-        <Rent>
-          <Period>{car.period}</Period>
-          <Price>R$ {car.price}</Price>
-        </Rent>
-      </Details>
-
-      {car.accessories && (
-        <Accessories>
-          {car.accessories.map((accessory) => (
-            <Accessory
-              key={accessory.type}
-              name={accessory.name}
-              icon={getAccessoryIcon(accessory.type)}
+        <Animated.View style={sliderCarsStyleAnimation}>
+          <CarImages>
+            <ImageSlider
+              imagesUrl={
+                // !!carUpdate.photos
+                //   ? carUpdate.photos
+                //   : [{ id: car.thumbnail, photo: car.thumbnail }]
+                car.photos.map((c, i) => {
+                  return { id: c, photo: c };
+                })
+              }
             />
-          ))}
-        </Accessories>
-      )}
+          </CarImages>
+        </Animated.View>
+      </Animated.View>
 
-      <About>{car.about}</About>
+      <Animated.ScrollView
+        contentContainerStyle={{
+          paddingHorizontal: 24,
+          alignItems: "center",
+          paddingTop: getStatusBarHeight() + 160,
+        }}
+        showsVerticalScrollIndicator={false}
+        onScroll={scrollHandler}
+        scrollEventThrottle={16}
+      >
+        <Details>
+          <Description>
+            <Brand>{car.brand}</Brand>
+            <Name>{car.name}</Name>
+          </Description>
+
+          <Rent>
+            <Period>{car.period}</Period>
+            <Price>R$ {car.price}</Price>
+          </Rent>
+        </Details>
+
+        {car.accessories && (
+          <Accessories>
+            {car.accessories.map((accessory) => (
+              <Accessory
+                key={accessory.type}
+                name={accessory.name}
+                icon={getAccessoryIcon(accessory.type)}
+              />
+            ))}
+          </Accessories>
+        )}
+
+        <About>{car.about}</About>
+        <About>{car.about}</About>
+        <About>{car.about}</About>
+        <About>{car.about}</About>
+        <About>{car.about}</About>
+      </Animated.ScrollView>
 
       <Footer>
         <Button

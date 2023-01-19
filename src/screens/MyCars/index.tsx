@@ -94,41 +94,40 @@ export function MyCars() {
 
         <SubTitle>Conforto, segurança e praticidade.</SubTitle>
       </Header>
-      {
-        // loading ? <LoadAnimation /> :
-        loading ? null : (
-          <Content>
-            <Appointments>
-              <AppointmentsTitle>Agendamentos feitos</AppointmentsTitle>
-              <AppointmentsQuantity>{cars.length}</AppointmentsQuantity>
-            </Appointments>
+      {loading ? (
+        <LoadAnimation />
+      ) : (
+        <Content>
+          <Appointments>
+            <AppointmentsTitle>Agendamentos feitos</AppointmentsTitle>
+            <AppointmentsQuantity>{cars.length}</AppointmentsQuantity>
+          </Appointments>
 
-            <FlatList
-              data={cars}
-              keyExtractor={(item) => String(item.id)}
-              showsVerticalScrollIndicator={false}
-              renderItem={({ item }) => (
-                <CarWrapper>
-                  <Car data={item.car} />
-                  <CarFooter>
-                    <CarFooterTitle>Período</CarFooterTitle>
-                    <CarFooterPeriod>
-                      <CarFooterDate>{item.start_date}</CarFooterDate>
-                      <AntDesign
-                        name="arrowright"
-                        size={20}
-                        color={theme.colors.title}
-                        style={{ marginHorizontal: 10 }}
-                      />
-                      <CarFooterDate>{item.end_date}</CarFooterDate>
-                    </CarFooterPeriod>
-                  </CarFooter>
-                </CarWrapper>
-              )}
-            />
-          </Content>
-        )
-      }
+          <FlatList
+            data={cars}
+            keyExtractor={(item) => String(item.id)}
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item }) => (
+              <CarWrapper>
+                <Car data={item.car} />
+                <CarFooter>
+                  <CarFooterTitle>Período</CarFooterTitle>
+                  <CarFooterPeriod>
+                    <CarFooterDate>{item.start_date}</CarFooterDate>
+                    <AntDesign
+                      name="arrowright"
+                      size={20}
+                      color={theme.colors.title}
+                      style={{ marginHorizontal: 10 }}
+                    />
+                    <CarFooterDate>{item.end_date}</CarFooterDate>
+                  </CarFooterPeriod>
+                </CarFooter>
+              </CarWrapper>
+            )}
+          />
+        </Content>
+      )}
     </Container>
   );
 }

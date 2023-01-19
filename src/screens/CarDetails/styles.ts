@@ -88,7 +88,7 @@ export const Footer = styled.View`
   width: 100%;
   background-color: ${({ theme }) => theme.colors.background_secondary};
 
-  padding: 24px 24px ${getBottomSpace() + 24}px;
+  padding: 24px;
 `;
 
 export const OfflineInfo = styled.Text`

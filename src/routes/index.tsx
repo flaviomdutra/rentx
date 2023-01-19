@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 
 import { AppTabRoutes } from './app.tab.routes';
 import { AuthRoutes } from './auth.routes';
+import { AppStackRoutes } from './app.stack.routes';
 
 export function Routes(){
   // const { user } = useAuth();
@@ -11,7 +12,7 @@ export function Routes(){
   return (
     <NavigationContainer>
       {/* { user.id ? <AppTabRoutes /> : <AuthRoutes /> } */}
-      <AppTabRoutes /> 
+      <AppStackRoutes /> 
     </NavigationContainer>
   );
 }
