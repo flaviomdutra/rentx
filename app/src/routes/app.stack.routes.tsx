@@ -13,13 +13,7 @@ const { Navigator, Screen } = createStackNavigator();
 export function AppStackRoutes() {
   return (
     <Navigator headerMode="none" initialRouteName="Home">
-      <Screen
-        name="Home"
-        component={Home}
-        options={{
-          gestureEnabled: false,
-        }}
-      />
+      <Screen name="Home" component={Home} />
       <Screen name="CarDetails" component={CarDetails} />
       <Screen name="Scheduling" component={Scheduling} />
       <Screen name="SchedulingDetails" component={SchedulingDetails} />
