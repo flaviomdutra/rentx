@@ -371,7 +371,7 @@ PODS:
   - SDWebImageWebPCoder (0.8.5):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.10)
-  - WatermelonDB (0.25.0):
+  - WatermelonDB (0.22.0):
     - React
     - React-jsi
   - Yoga (1.14.0)
@@ -593,7 +593,7 @@ SPEC CHECKSUMS:
   RNSVG: 07dbd870b0dcdecc99b3a202fa37c8ca163caec2
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
-  WatermelonDB: 9c5e9d059c5909a0a8025340751640c5a0aad806
+  WatermelonDB: 1da309a2b3fe35360e92f5a6bda2156543447955
   Yoga: eca980a5771bf114c41a754098cd85e6e0d90ed7
 
 PODFILE CHECKSUM: 0f546b1b2bda04ce8744ffa3edc36bf9f34aadca

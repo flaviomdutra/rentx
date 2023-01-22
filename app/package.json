@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "expo start --dev-client",
-    "android": "expo run:android",
-    "ios": "expo run:ios",
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
     "web": "expo start --web",
-    "api": "json-server ./src/services/server.json --host 192.168.15.10 --port 3333 --delay 700"
+    "start": "react-native start",
+    "test": "jest",
+    "api": "json-server ./src/services/server.json --host 192.168.0.107 --port 3333 --delay 700"
   },
   "dependencies": {
     "@expo-google-fonts/archivo": "^0.2.2",
