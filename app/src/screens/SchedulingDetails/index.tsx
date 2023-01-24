@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import { format } from 'date-fns';
-import { Feather } from '@expo/vector-icons';
-import { RFValue } from 'react-native-responsive-fontsize';
-import { useTheme } from 'styled-components';
-import { Alert } from 'react-native';
+import React, { useEffect, useState } from "react";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { format } from "date-fns";
+import { Feather } from "@expo/vector-icons";
+import { RFValue } from "react-native-responsive-fontsize";
+import { useTheme } from "styled-components";
+import { Alert } from "react-native";
 
-import { BackButton } from '../../components/BackButton';
-import { ImageSlider } from '../../components/ImageSlider';
-import { Accessory } from '../../components/Accessory';
-import { Button } from '../../components/Button';
+import { BackButton } from "../../components/BackButton";
+import { ImageSlider } from "../../components/ImageSlider";
+import { Accessory } from "../../components/Accessory";
+import { Button } from "../../components/Button";
 
-import { CarDTO } from '../../dtos/CarDTO';
-import { getAccessoryIcon } from '../../utils/getAccessoryIcon';
-import { getPlatformDate } from '../../utils/getPlatformDate';
-import { api } from '../../services/api';
+import { CarDTO } from "../../dtos/CarDTO";
+import { getAccessoryIcon } from "../../utils/getAccessoryIcon";
+import { getPlatformDate } from "../../utils/getPlatformDate";
+import { api } from "../../services/api";
 
 import {
   Container,
@@ -40,7 +40,8 @@ import {
   RentalPriceDetails,
   RentalPriceQuota,
   RentalPriceTotal,
-} from './styles';
+} from "./styles";
+import { useAuth } from "../../hooks/auth";
 
 interface Params {
   car: CarDTO;
@@ -52,51 +53,59 @@ interface RentalPeriod {
   end: string;
 }
 
-export function SchedulingDetails(){
+export function SchedulingDetails() {
   const [loading, setLoading] = useState(false);
-  const [rentalPeriod, setRentalPeriod] = useState<RentalPeriod>({} as RentalPeriod);
-  
+  const [rentalPeriod, setRentalPeriod] = useState<RentalPeriod>(
+    {} as RentalPeriod
+  );
+
   const theme = useTheme();
   const navigation = useNavigation();
   const route = useRoute();
   const { car, dates } = route.params as Params;
+  const { user } = useAuth();
 
   const rentTotal = Number(dates.length * car.price);
 
   async function handleConfirmRental() {
     setLoading(true);
 
-    await api.post('/rentals', {      
-      user_id: 1,
-      car_id: car.id,
-      start_date: new Date(),
-      end_date: new Date(),
-      total: rentTotal
-    })
-    .then(() => {
-      navigation.navigate('Confirmation', {
-        nextScreenRoute: 'Home',
-        title: 'Carro alugado!',
-        message: `Agora você só precisa ir\naté a concessionária da RENTX\npegar o seu automóvel.`
+    await api
+      .post("/rentals", {
+        user_id: user.id,
+        car_id: car.id,
+        start_date: new Date(dates[0]),
+        end_date: new Date(dates[dates.length - 1]),
+        total: rentTotal,
       })
-    })
-    .catch((erro) => {
-      setLoading(false);
-      Alert.alert('Não foi possível confirmar o agendamento.')
-    })
+      .then(() => {
+        navigation.navigate("Confirmation", {
+          nextScreenRoute: "Home",
+          title: "Carro alugado!",
+          message: `Agora você só precisa ir\naté a concessionária da RENTX\npegar o seu automóvel.`,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
+        Alert.alert("Não foi possível confirmar o agendamento.");
+      });
   }
 
-  function handleBack(){
-    navigation.goBack();    
+  function handleBack() {
+    navigation.goBack();
   }
 
   useEffect(() => {
     setRentalPeriod({
-      start: format(getPlatformDate(new Date(dates[0])), 'dd/MM/yyyy'),
-      end:  format(getPlatformDate(new Date(dates[dates.length - 1])), 'dd/MM/yyyy'),
-    })
-  },[])
-  
+      start: format(getPlatformDate(new Date(dates[0])), "dd/MM/yyyy"),
+      end: format(
+        getPlatformDate(new Date(dates[dates.length - 1])),
+        "dd/MM/yyyy"
+      ),
+    });
+  }, []);
+
   return (
     <Container>
       <Header>
@@ -104,9 +113,7 @@ export function SchedulingDetails(){
       </Header>
 
       <CarImages>
-        <ImageSlider 
-          imagesUrl={car.photos} 
-        />
+        <ImageSlider imagesUrl={car.photos} />
       </CarImages>
 
       <Content>
@@ -123,20 +130,18 @@ export function SchedulingDetails(){
         </Details>
 
         <Accessories>
-          {
-            car.accessories.map(accessory => (
-              <Accessory 
-                key={accessory.type}
-                name={accessory.name}
-                icon={getAccessoryIcon(accessory.type)}
-              />
-            ))
-          }
+          {car.accessories.map((accessory) => (
+            <Accessory
+              key={accessory.type}
+              name={accessory.name}
+              icon={getAccessoryIcon(accessory.type)}
+            />
+          ))}
         </Accessories>
 
         <RentalPeriod>
           <CalendarIcon>
-            <Feather 
+            <Feather
               name="calendar"
               size={RFValue(24)}
               color={theme.colors.shape}
@@ -148,10 +153,10 @@ export function SchedulingDetails(){
             <DateValue>{rentalPeriod.start}</DateValue>
           </DateInfo>
 
-          <Feather 
-              name="chevron-right"
-              size={RFValue(10)}
-              color={theme.colors.text}
+          <Feather
+            name="chevron-right"
+            size={RFValue(10)}
+            color={theme.colors.text}
           />
 
           <DateInfo>
@@ -170,9 +175,9 @@ export function SchedulingDetails(){
       </Content>
 
       <Footer>
-        <Button 
-          title="Alugar agora" 
-          color={theme.colors.success} 
+        <Button
+          title="Alugar agora"
+          color={theme.colors.success}
           onPress={handleConfirmRental}
           enabled={!loading}
           loading={loading}

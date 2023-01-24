@@ -15,12 +15,11 @@ export const ImageIndexes = styled.View`
 export const CarImageWrapper = styled.View`
   width: ${Dimensions.get('window').width}px;
   height: 132px;
-
   justify-content: center;
   align-items: center;
 `;
 
-export const CarImage = styled.Image`
+export const CarImage = styled(FastImage)`
   width: 280px;
   height: 132px;
 `;

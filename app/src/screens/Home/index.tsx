@@ -83,27 +83,26 @@ export function Home() {
       },
       pushChanges: async ({ changes }) => {
         const user = changes.users;
-        await api.post("/users/sync", user);
+        await api.post("/users/sync", user).catch(console.log);
       },
     });
   }
 
   useEffect(() => {
     let isMounted = true;
-    
+
     async function fetchCars() {
       try {
-        const carCollection = database.get<ModelCar>('cars');
+        const carCollection = database.get<ModelCar>("cars");
         const cars = await carCollection.query().fetch();
-        
 
-        if(isMounted){
+        if (isMounted) {
           setCars(cars);
         }
       } catch (error) {
-        console.log(error);        
-      }finally{
-        if(isMounted){
+        console.log(error);
+      } finally {
+        if (isMounted) {
           setLoading(false);
         }
       }
@@ -113,7 +112,7 @@ export function Home() {
     return () => {
       isMounted = false;
     };
-  },[]);
+  }, []);
 
   useEffect(() => {
     if (netInfo.isConnected === true) {
