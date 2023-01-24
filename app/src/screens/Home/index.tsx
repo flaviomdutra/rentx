@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StatusBar, StyleSheet } from "react-native";
+import { Alert, StatusBar, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { RFValue } from "react-native-responsive-fontsize";
 import { Ionicons } from "@expo/vector-icons";
@@ -11,6 +11,7 @@ import Animated, {
   withSpring,
 } from "react-native-reanimated";
 import { RectButton, PanGestureHandler } from "react-native-gesture-handler";
+import NetInfo, { useNetInfo } from "@react-native-community/netinfo";
 
 const ButtonAnimated = Animated.createAnimatedComponent(RectButton);
 
@@ -54,6 +55,7 @@ export function Home() {
     },
   });
 
+  const netInfo = useNetInfo();
   const navigation = useNavigation();
 
   function handleCarDetails(car: CarDTO) {
@@ -88,6 +90,14 @@ export function Home() {
       isMounted = false;
     };
   }, []);
+
+  useEffect(() => {
+    if (netInfo.isConnected) {
+      Alert.alert("Você está On-Line");
+    } else {
+      Alert.alert("Você está Off-Line");
+    }
+  }, [netInfo.isConnected]);
 
   return (
     <Container>
